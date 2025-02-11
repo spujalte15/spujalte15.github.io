@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TD Event Simulator</title>
+    <style>
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow: auto; /* Allow the body to scroll based on content */
+    }
+
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #0073e6;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            width: 80%;
+            max-width: 1200px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tab-buttons {
+            display: flex;
+            background-color: #0073e6;
+            color: white;
+        }
+
+        .tab-buttons button {
+            flex: 1;
+            padding: 20px;
+            background-color: #0073e6;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .tab-buttons button.active {
+            background-color: #005bb5;
+        }
+
+
+    .tab-content {
+        display: none;
+        padding: 40px;
+        flex-direction: column; /* Stack content vertically */
+        overflow-y: auto; /* Enable vertical scrolling within each tab if needed */
+        max-height: calc(100vh - 200px); /* Adjust as needed to fit content without exceeding screen */
+    }
+
+        /* Common tab-content styling for active tabs */
+        .tab-content.active {
+            display: flex;
+            flex-direction: column; /* Stack elements vertically in the tab */
+            overflow-y: auto; /* Allow scrolling within each tab if needed */
+        }
+
+                    
+            /* Flex container for form and image/map side by side */
+            .flex-container {
+                display: flex;
+                flex-direction: row; /* Align form and image/map side by side */
+                justify-content: space-between; /* Space between form and image/map */
+                align-items: flex-start; /* Align items to the top */
+                margin-bottom: 20px; /* Add margin below the form and image/map container */
+            }
+
+
+        .form-container {
+            width: 100%; /* Full width for form */
+            padding: 40px;
+            box-sizing: border-box;
+            background-color: #0073e6;
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 20px; /* Add spacing below form */
+        }
+
+        .form-container h1 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .form-container label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .form-container input[type="text"], .form-container button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .form-container input[type="submit"], .form-container button, .checkout-button {
+            padding: 10px 20px;
+            background-color: #00aaff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .toggle-container {
+            margin-bottom: 20px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #0073e6;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .image-container {
+            width: 50%;
+            padding: 40px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+    /* Ensure image container adapts properly next to the form */
+    .image-container {
+        width: 45%; /* Adjust width to fit next to the form */
+        padding: 20px; /* Adjust padding as needed */
+        box-sizing: border-box;
+        text-align: center;
+        display: flex; /* Make sure the image container displays properly next to the form */
+        align-items: center; /* Center image vertically */
+        justify-content: center; /* Center image horizontally */
+    }
+
+        .item-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 30%;
+        }
+
+        .item-column img {
+            width: 100px; /* Set a fixed width for all images */
+            height: 100px; /* Set a fixed height for all images */
+            object-fit: cover; /* Ensure images maintain aspect ratio while filling the space */
+            margin-bottom: 10px;
+        }
+
+
+.api-container {
+    width: 45%; /* Width to fit side-by-side in .api-output */
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: auto; /* Allow scrolling within each API container */
+    border-radius: 8px;
+    display: none; /* Initially hidden */
+    max-height: 200px; /* Prevents the API container from growing too large */
+}
+    
+        
+        
+
+        .api-container pre {
+            background-color: #252526;
+            padding: 20px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+        }
+
+        .api-container h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #00aaff;
+        }
+        
+        .api-output {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px; /* Add spacing above API output */
+        }
+
+        /* Styles for Geofence tab */
+        .geofence-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Align items at the start */
+            width: 100%;
+            margin-bottom: 20px; /* Add spacing below geofence section */
+        }
+
+        #Store .item-container {
+            display: flex;
+            justify-content: space-between; /* Distribute space evenly between items */
+            flex-wrap: wrap; /* Allow items to wrap if needed */
+        }
+        
+        #Store .item-column {
+            width: 30%; /* Ensure each item takes up about 30% of the container's width */
+            text-align: center; /* Center align items within each column */
+            margin-bottom: 20px; /* Add space below each item */
+        }
+
+        #map {
+            width: 600px;
+            height: 400px;
+            position: relative;
+            border: 2px solid #000;
+        }
+
+        #geofence {
+            position: absolute;
+            top: 100px;
+            left: 150px;
+            width: 200px;
+            height: 200px;
+            border: 2px dashed red;
+            border-radius: 50%; /* Circular shape for the geofence */
+        }
+    </style>
+
+<script>
+        let items = [];
+
+        function openTab(event, tabName) {
+            const tabContent = document.getElementsByClassName('tab-content');
+            const tabButtons = document.getElementsByClassName('tab-buttons')[0].children;
+
+            for (let i = 0; i < tabContent.length; i++) {
+                tabContent[i].classList.remove('active');
+            }
+
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        function makeApiCallPump() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const token = document.getElementById('token').value;
+
+            const data = {};
+            if (phoneNumber) data.phone = phoneNumber;
+            if (token) data.token = token;
+            data.event = 'fuel_purchase';
+
+            const jsonData = JSON.stringify(data, null, 4);
+
+            const apiCall = `curl --location 'https://us01.p13n.in.treasuredata.com/real_time/personalization_transactions' \\\n--header 'Authorization: TD1 10602/xxxxx' \\\n--header 'Content-Type: application/json' \\\n--data-raw '${jsonData}'`;
+
+            document.getElementById('apiCallPump').innerText = apiCall;
+
+            const apiGatewayUrl = 'https://e6a59nov2l.execute-api.us-east-2.amazonaws.com/default/cstore-personalization';
+
+            fetch(apiGatewayUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                        jsonData: jsonData,
+                        database: "real_time",
+                        table: "personalization_transactions"
+                })  // Wrap jsonData in an object as expected by the Lambda
+            })
+                .then(response => response.json())
+                .then(data => {
+                    
+                    const responseText = JSON.stringify(data, null, 4);
+                    document.getElementById('apiResponsePump').innerText = responseText;
+                    console.log(data);
+                    let imageUrl = '';
+
+                    // Initialize variable to store next_best_product
+                    let nextBestProduct = null;
+                    let nextBestProductUri = null;
+                
+                    // Check if 'next_best_product' is available in the response
+                    if (data.offers && data.offers.fuelup_personalization && data.offers.fuelup_personalization.next_best_product) {
+                        nextBestProduct = data.offers.fuelup_personalization.next_best_product;
+                    }
+                    if (data.offers && data.offers.fuelup_personalization && data.offers.fuelup_personalization.next_best_product_uri) {
+                        nextBestProductUri = data.offers.fuelup_personalization.next_best_product_uri;
+                    }
+                    
+                    if ( nextBestProductUri) {
+                        imageUrl = nextBestProductUri;
+                    } else {
+                        imageUrl = 'https://www.circlek.com/sites/default/files/2023-06/23045_circlek_still_1_v01_resize36_1.jpg'
+                    }
+
+                    if (imageUrl) {
+                        document.getElementById('pumpImage').src = imageUrl;
+                        document.getElementById('pumpImageContainer').style.display = 'block';
+                    } else {
+                        document.getElementById('pumpImageContainer').style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('apiResponsePump').innerText = 'Error: ' + error;
+                });
+        }
+
+        function addItem(product_name, product_price) {
+            items.push({ product_name, product_price });
+            alert(`${product_name} added to cart. Current items: ${items.map(item => item.product_name).join(', ')}`);
+        }
+
+        function checkout() {
+            const phone = document.getElementById('phone').value;
+            const token = document.getElementById('storeToken').value;
+            const cart_amount = items.reduce((total, item) => total + item.product_price, 0);
+            const cart = items.map(item => item.product_name);  // Array of product names
+
+            const data = { cart, cart_amount };
+            if (phone) data.phone = phone;
+            if (token) data.token = token;
+            data.event = 'fuel_purchase';
+
+            const jsonData = JSON.stringify(data, null, 4);
+
+            const apiCall = `curl --location 'https://us01.p13n.in.treasuredata.com/real_time/personalization_transactions' \\\n--header 'Authorization: TD1 10602/xxxxx' \\\n--header 'Content-Type: application/json' \\\n--data-raw '${jsonData}'`;
+
+            document.getElementById('apiCallStore').innerText = apiCall;
+            
+            const apiGatewayUrl = 'https://e6a59nov2l.execute-api.us-east-2.amazonaws.com/default/cstore-personalization';
+
+            fetch(apiGatewayUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                        jsonData: jsonData,
+                        database: "real_time",
+                        table: "personalization_transactions"
+                })  // Wrap jsonData in an object as expected by the Lambda
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const responseText = JSON.stringify(data, null, 4);
+                    document.getElementById('apiResponseStore').innerText = responseText;
+                    items = []; // Clear items after checkout
+                })
+                .catch(error => {
+                    document.getElementById('apiResponseStore').innerText = 'Error: ' + error;
+                });
+        }
+
+        function toggleAllApiSections() {
+            const apiContainers = document.getElementsByClassName('api-container');
+            Array.from(apiContainers).forEach(container => {
+                if (container.style.display === 'none' || container.style.display === '') {
+                    container.style.display = 'block';
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+        }
+    </script>
+  </head>  
+<body>
+    <div class="title">TD Event Simulator</div>
+        <div class="toggle-container">
+        <label class="switch">
+            <input type="checkbox" onclick="toggleAllApiSections()">
+            <span class="slider"></span>
+        </label>
+        <span>Show/Hide All API Details</span>
+    </div>
+    <div class="tabs">
+        <div class="tab-buttons">
+            <button class="active" onclick="openTab(event, 'Geofence')">Geofence</button>
+            <button onclick="openTab(event, 'Pump')">Pump</button>
+            <button onclick="openTab(event, 'Store')">Store</button>
+        </div>
+        <div id="Geofence" class="tab-content active">
+            <div class="flex-container">
+                <div class="form-container">
+                    <h1>Geofence Simulation</h1>
+                    <label for="customerId">Customer ID:</label>
+                    <input type="text" id="customerId" name="customerId">
+                </div>
+                <div id="map" class="map-container">
+                    <div id="geofence"></div>
+                    <img id="car" src="https://www.iconpacks.net/icons/1/free-iphone-icon-709-thumb.png" width="60px" height="auto" alt="Car">
+                </div>
+            </div>
+            <div class="api-output">
+                <div class="api-container" id="apiContainerGeofence">
+                    <h2>API Call</h2>
+                    <pre id="apiCallGeofence">Awaiting API Call...</pre>
+                </div>
+                <div class="api-container" id="apiContainerGeofenceResponse">
+                    <h2>Response</h2>
+                    <pre id="apiResponseGeofence">Awaiting Response...</pre>
+                </div>
+            </div>
+        </div>
+<div id="Pump" class="tab-content">
+    <div class="flex-container">
+        <div class="form-container">
+            <h1>Pump API Call</h1>
+            <form id="apiFormPump" onsubmit="event.preventDefault(); makeApiCallPump();">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber">
+
+                <label for="token">Credit Card Token:</label>
+                <input type="text" id="token" name="token">
+
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div id="pumpImageContainer" class="image-container" style="display: none;">
+            <img id="pumpImage" src="" alt="Pump Image">
+        </div>
+    </div>
+    <div class="api-output">
+        <div class="api-container" id="apiContainerPump">
+            <h2>API Call</h2>
+            <pre id="apiCallPump">Awaiting API Call...</pre>
+        </div>
+        <div class="api-container" id="apiContainerPumpResponse">
+            <h2>Response</h2>
+            <pre id="apiResponsePump">Awaiting Response...</pre>
+        </div>
+    </div>
+</div>
+<div id="Store" class="tab-content">
+    <div class="flex-container">
+        <div class="form-container">
+            <h1>Store API Call</h1>
+            <div class="item-container">
+                <div class="item-column">
+                    <img src="https://www.pngkey.com/png/full/300-3006014_potato-chips-png-lays-potato-chips-regular.png" alt="Snack">
+                    <button class="item-button" onclick="addItem('snack', 2.50)">Buy A Snack</button>
+                </div>
+                <div class="item-column">
+                    <img src="https://static.vecteezy.com/system/resources/previews/015/082/045/original/paper-coffee-cup-png.png" alt="Coffee">
+                    <button class="item-button" onclick="addItem('coffee', 3.00)">Buy A Coffee</button>
+                </div>
+                <div class="item-column">
+                    <img src="https://130337210.cdn6.editmysite.com/uploads/1/3/0/3/130337210/s579274848770928856_p7_i2_w2000.png" alt="Soda">
+                    <button class="item-button" onclick="addItem('soda', 1.75)">Buy A Soda</button>
+                </div>
+            </div>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone">
+
+            <label for="storeToken">Credit Card Token:</label>
+            <input type="text" id="storeToken" name="token">
+
+            <button class="checkout-button" onclick="checkout()">Checkout</button>
+        </div>
+    </div>
+    <div class="api-output">
+        <div class="api-container" id="apiContainerStore">
+            <h2>API Call</h2>
+            <pre id="apiCallStore">Awaiting API Call...</pre>
+        </div>
+        <div class="api-container" id="apiContainerStoreResponse">
+            <h2>Response</h2>
+            <pre id="apiResponseStore">Awaiting Response...</pre>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const car = document.getElementById('car');
+            const geofence = document.getElementById('geofence');
+            const map = document.getElementById('map');
+
+            let offsetX, offsetY;
+            let isInsideGeofence = false;
+            let isDraggingEnabled = true;
+
+            car.style.position = 'absolute';
+            car.style.left = '0px';
+            car.style.top = '0px';
+
+            car.addEventListener('mousedown', function (e) {
+                if (!isDraggingEnabled) return;
+                e.preventDefault();
+
+                const rect = map.getBoundingClientRect(); // Use map container to calculate offset
+                offsetX = e.clientX - rect.left - car.offsetLeft;
+                offsetY = e.clientY - rect.top - car.offsetTop;
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+
+            function onMouseMove(e) {
+                const rect = map.getBoundingClientRect();
+
+                const newX = e.clientX - rect.left - offsetX;
+                const newY = e.clientY - rect.top - offsetY;
+
+                car.style.left = newX + 'px';
+                car.style.top = newY + 'px';
+
+                checkGeofence();
+            }
+
+            function onMouseUp() {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+
+            function checkGeofence() {
+                const geofenceRect = geofence.getBoundingClientRect();
+                const carRect = car.getBoundingClientRect();
+
+                const geofenceCenterX = geofenceRect.left + geofenceRect.width / 2;
+                const geofenceCenterY = geofenceRect.top + geofenceRect.height / 2;
+                const geofenceRadius = geofenceRect.width / 2;
+
+                const carCenterX = carRect.left + carRect.width / 2;
+                const carCenterY = carRect.top + carRect.height / 2;
+
+                const distance = Math.sqrt(
+                    Math.pow(carCenterX - geofenceCenterX, 2) +
+                    Math.pow(carCenterY - geofenceCenterY, 2)
+                );
+
+                if (distance <= geofenceRadius) {
+                    if (!isInsideGeofence) {
+                        console.log('Car is inside the geofence!');
+                        triggerFunction();
+                        isInsideGeofence = true;
+                        isDraggingEnabled = false;
+                        car.style.cursor = 'default';
+                    }
+                }
+            }
+
+        function triggerFunction() {
+                const customerId = document.getElementById('customerId').value;
+
+                if (!customerId) {
+                    alert('Customer ID is required.');
+                    return;
+                }
+
+                const data = {
+                    customer_id: customerId,
+                    event: 'geofence'
+                };
+                const jsonData = JSON.stringify(data, null, 4);
+            
+                const apiCall = `curl --location 'https://us01.p13n.in.treasuredata.com/real_time/personalization_clickstream' \\\n--header 'Authorization: TD1 10602/xxxxx' \\\n--header 'Content-Type: application/json' \\\n--data-raw '${jsonData}'`;
+
+                document.getElementById('apiCallGeofence').innerText = apiCall;
+
+                fetch('https://e6a59nov2l.execute-api.us-east-2.amazonaws.com/default/cstore-personalization', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        jsonData: jsonData,
+                        database: "real_time",
+                        table: "personalization_clickstream"
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('apiResponseGeofence').innerText = JSON.stringify(data, null, 4);
+                })
+                .catch(error => {
+                    alert('Error: Could not complete API request.');
+                    document.getElementById('apiResponseGeofence').innerText = 'Error: ' + error;
+                });
+            }
+
+            car.addEventListener('click', function () {
+                if (isInsideGeofence) {
+                    isDraggingEnabled = true;
+                    isInsideGeofence = false;
+                    car.style.cursor = 'grab';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
