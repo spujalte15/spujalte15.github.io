@@ -3,10 +3,10 @@
 <head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TD Event Simulator</title>
+    <title>Fortnum & Mason - Real-time use case</title>
     <style>
     body {
-        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-family: "DM Serif Text", serif;
         background-color: #f5f5f5;
         color: #333;
         margin: 0;
@@ -23,6 +23,7 @@
             font-weight: bold;
             color: #0073e6;
             margin-bottom: 20px;
+            margin-top:100px;
         }
 
         .tabs {
@@ -83,12 +84,14 @@
 
 
         .form-container {
-            width: 100%; /* Full width for form */
+            width: 60%; /* Full width for form */
             padding: 40px;
             box-sizing: border-box;
             background-color: #0073e6;
             color: white;
             border-radius: 8px;
+            margin-left: 50px;
+            margin-right: 100px;
             margin-bottom: 20px; /* Add spacing below form */
         }
 
@@ -124,6 +127,7 @@
         }
 
         .toggle-container {
+            margin-top:20px;
             margin-bottom: 20px;
         }
 
@@ -271,7 +275,7 @@
         }
 
         #map {
-            width: 600px;
+            width: 700px;
             height: 400px;
             position: relative;
             border: 2px solid #000;
@@ -286,138 +290,23 @@
             border: 2px dashed red;
             border-radius: 50%; /* Circular shape for the geofence */
         }
+        #car {
+            width:60px;
+            height:auto;
+            z-index:3;
+        }
+        #fmstore {
+            position: absolute;
+            top: 101px;
+            left: 151px;
+            width: 202px;
+            height: 202px;
+            z-index: 2;
+        }
     </style>
 
 <script>
         let items = [];
-
-        function openTab(event, tabName) {
-            const tabContent = document.getElementsByClassName('tab-content');
-            const tabButtons = document.getElementsByClassName('tab-buttons')[0].children;
-
-            for (let i = 0; i < tabContent.length; i++) {
-                tabContent[i].classList.remove('active');
-            }
-
-            for (let i = 0; i < tabButtons.length; i++) {
-                tabButtons[i].classList.remove('active');
-            }
-
-            document.getElementById(tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        function makeApiCallPump() {
-            const phoneNumber = document.getElementById('phoneNumber').value;
-            const token = document.getElementById('token').value;
-
-            const data = {};
-            if (phoneNumber) data.phone = phoneNumber;
-            if (token) data.token = token;
-            data.event = 'fuel_purchase';
-
-            const jsonData = JSON.stringify(data, null, 4);
-
-            const apiCall = `curl --location 'https://us01.p13n.in.treasuredata.com/real_time/personalization_transactions' \\\n--header 'Authorization: TD1 10602/xxxxx' \\\n--header 'Content-Type: application/json' \\\n--data-raw '${jsonData}'`;
-
-            document.getElementById('apiCallPump').innerText = apiCall;
-
-            const apiGatewayUrl = 'https://e6a59nov2l.execute-api.us-east-2.amazonaws.com/default/cstore-personalization';
-
-            fetch(apiGatewayUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                        jsonData: jsonData,
-                        database: "real_time",
-                        table: "personalization_transactions"
-                })  // Wrap jsonData in an object as expected by the Lambda
-            })
-                .then(response => response.json())
-                .then(data => {
-                    
-                    const responseText = JSON.stringify(data, null, 4);
-                    document.getElementById('apiResponsePump').innerText = responseText;
-                    console.log(data);
-                    let imageUrl = '';
-
-                    // Initialize variable to store next_best_product
-                    let nextBestProduct = null;
-                    let nextBestProductUri = null;
-                
-                    // Check if 'next_best_product' is available in the response
-                    if (data.offers && data.offers.fuelup_personalization && data.offers.fuelup_personalization.next_best_product) {
-                        nextBestProduct = data.offers.fuelup_personalization.next_best_product;
-                    }
-                    if (data.offers && data.offers.fuelup_personalization && data.offers.fuelup_personalization.next_best_product_uri) {
-                        nextBestProductUri = data.offers.fuelup_personalization.next_best_product_uri;
-                    }
-                    
-                    if ( nextBestProductUri) {
-                        imageUrl = nextBestProductUri;
-                    } else {
-                        imageUrl = 'https://www.circlek.com/sites/default/files/2023-06/23045_circlek_still_1_v01_resize36_1.jpg'
-                    }
-
-                    if (imageUrl) {
-                        document.getElementById('pumpImage').src = imageUrl;
-                        document.getElementById('pumpImageContainer').style.display = 'block';
-                    } else {
-                        document.getElementById('pumpImageContainer').style.display = 'none';
-                    }
-                })
-                .catch(error => {
-                    document.getElementById('apiResponsePump').innerText = 'Error: ' + error;
-                });
-        }
-
-        function addItem(product_name, product_price) {
-            items.push({ product_name, product_price });
-            alert(`${product_name} added to cart. Current items: ${items.map(item => item.product_name).join(', ')}`);
-        }
-
-        function checkout() {
-            const phone = document.getElementById('phone').value;
-            const token = document.getElementById('storeToken').value;
-            const cart_amount = items.reduce((total, item) => total + item.product_price, 0);
-            const cart = items.map(item => item.product_name);  // Array of product names
-
-            const data = { cart, cart_amount };
-            if (phone) data.phone = phone;
-            if (token) data.token = token;
-            data.event = 'fuel_purchase';
-
-            const jsonData = JSON.stringify(data, null, 4);
-
-            const apiCall = `curl --location 'https://us01.p13n.in.treasuredata.com/real_time/personalization_transactions' \\\n--header 'Authorization: TD1 10602/xxxxx' \\\n--header 'Content-Type: application/json' \\\n--data-raw '${jsonData}'`;
-
-            document.getElementById('apiCallStore').innerText = apiCall;
-            
-            const apiGatewayUrl = 'https://e6a59nov2l.execute-api.us-east-2.amazonaws.com/default/cstore-personalization';
-
-            fetch(apiGatewayUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                        jsonData: jsonData,
-                        database: "real_time",
-                        table: "personalization_transactions"
-                })  // Wrap jsonData in an object as expected by the Lambda
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const responseText = JSON.stringify(data, null, 4);
-                    document.getElementById('apiResponseStore').innerText = responseText;
-                    items = []; // Clear items after checkout
-                })
-                .catch(error => {
-                    document.getElementById('apiResponseStore').innerText = 'Error: ' + error;
-                });
-        }
 
         function toggleAllApiSections() {
             const apiContainers = document.getElementsByClassName('api-container');
@@ -432,21 +321,17 @@
     </script>
   </head>  
 <body>
-    <div class="title">TD Event Simulator</div>
-        <div class="toggle-container">
+    <div class="title">
+        <img src="https://i.postimg.cc/hGP7F21M/unnamed.png" width="350px" height="auto">
+    </div>
+    <div class="toggle-container">
         <label class="switch">
             <input type="checkbox" onclick="toggleAllApiSections()">
             <span class="slider"></span>
         </label>
         <span>Show/Hide All API Details</span>
     </div>
-    <div class="tabs">
-        <div class="tab-buttons">
-            <button class="active" onclick="openTab(event, 'Geofence')">Geofence</button>
-            <button onclick="openTab(event, 'Pump')">Pump</button>
-            <button onclick="openTab(event, 'Store')">Store</button>
-        </div>
-        <div id="Geofence" class="tab-content active">
+    <div id="Geofence" class="tab-content active">
             <div class="flex-container">
                 <div class="form-container">
                     <h1>Geofence Simulation</h1>
@@ -455,7 +340,8 @@
                 </div>
                 <div id="map" class="map-container">
                     <div id="geofence"></div>
-                    <img id="car" src="https://www.iconpacks.net/icons/1/free-iphone-icon-709-thumb.png" width="60px" height="auto" alt="Car">
+                    <img id="car"  src="https://www.iconpacks.net/icons/1/free-iphone-icon-709-thumb.png" width="60px" height="auto" alt="Car">
+                    <img id="fmstore" src="https://i.postimg.cc/CMRRYBTC/Untitled-presentation-1.png" >
                 </div>
             </div>
             <div class="api-output">
@@ -468,75 +354,6 @@
                     <pre id="apiResponseGeofence">Awaiting Response...</pre>
                 </div>
             </div>
-        </div>
-<div id="Pump" class="tab-content">
-    <div class="flex-container">
-        <div class="form-container">
-            <h1>Pump API Call</h1>
-            <form id="apiFormPump" onsubmit="event.preventDefault(); makeApiCallPump();">
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="text" id="phoneNumber" name="phoneNumber">
-
-                <label for="token">Credit Card Token:</label>
-                <input type="text" id="token" name="token">
-
-                <input type="submit" value="Submit">
-            </form>
-        </div>
-        <div id="pumpImageContainer" class="image-container" style="display: none;">
-            <img id="pumpImage" src="" alt="Pump Image">
-        </div>
-    </div>
-    <div class="api-output">
-        <div class="api-container" id="apiContainerPump">
-            <h2>API Call</h2>
-            <pre id="apiCallPump">Awaiting API Call...</pre>
-        </div>
-        <div class="api-container" id="apiContainerPumpResponse">
-            <h2>Response</h2>
-            <pre id="apiResponsePump">Awaiting Response...</pre>
-        </div>
-    </div>
-</div>
-<div id="Store" class="tab-content">
-    <div class="flex-container">
-        <div class="form-container">
-            <h1>Store API Call</h1>
-            <div class="item-container">
-                <div class="item-column">
-                    <img src="https://www.pngkey.com/png/full/300-3006014_potato-chips-png-lays-potato-chips-regular.png" alt="Snack">
-                    <button class="item-button" onclick="addItem('snack', 2.50)">Buy A Snack</button>
-                </div>
-                <div class="item-column">
-                    <img src="https://static.vecteezy.com/system/resources/previews/015/082/045/original/paper-coffee-cup-png.png" alt="Coffee">
-                    <button class="item-button" onclick="addItem('coffee', 3.00)">Buy A Coffee</button>
-                </div>
-                <div class="item-column">
-                    <img src="https://130337210.cdn6.editmysite.com/uploads/1/3/0/3/130337210/s579274848770928856_p7_i2_w2000.png" alt="Soda">
-                    <button class="item-button" onclick="addItem('soda', 1.75)">Buy A Soda</button>
-                </div>
-            </div>
-
-            <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" name="phone">
-
-            <label for="storeToken">Credit Card Token:</label>
-            <input type="text" id="storeToken" name="token">
-
-            <button class="checkout-button" onclick="checkout()">Checkout</button>
-        </div>
-    </div>
-    <div class="api-output">
-        <div class="api-container" id="apiContainerStore">
-            <h2>API Call</h2>
-            <pre id="apiCallStore">Awaiting API Call...</pre>
-        </div>
-        <div class="api-container" id="apiContainerStoreResponse">
-            <h2>Response</h2>
-            <pre id="apiResponseStore">Awaiting Response...</pre>
-        </div>
-    </div>
-</div>
     </div>
 
     <script>
