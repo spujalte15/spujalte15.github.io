@@ -444,15 +444,13 @@
 
                 document.getElementById('apiCallGeofence').innerText = apiCall;
 
-                fetch('https://e6a59nov2l.execute-api.us-east-2.amazonaws.com/default/cstore-personalization', {
+                fetch('https://ntfy.sh/fm_demo_td', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Title':'Fortnum & Mason'
                     },
-                    body: JSON.stringify({
-                        jsonData: jsonData,
-                        database: "real_time",
-                        table: "personalization_clickstream"
+                    body: "Benefit from 20% off at Fortnum & Mason St Pancras today!"
                     })
                 })
                 .then(response => response.json())
