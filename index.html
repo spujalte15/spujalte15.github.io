@@ -340,7 +340,7 @@
                 </div>
                 <div id="map" class="map-container">
                     <div id="geofence"></div>
-                    <img id="car"  src="https://www.iconpacks.net/icons/1/free-iphone-icon-709-thumb.png" width="60px" height="auto" alt="Car">
+                    <img id="car"  src="https://www.i.ibb.co/PGr9t7wT/s-blob-v1-IMAGE-0-ZOV92ii-HBA.png" width="60px" height="auto" alt="Car">
                     <img id="fmstore" src="https://i.postimg.cc/CMRRYBTC/Untitled-presentation-1.png" >
                 </div>
             </div>
@@ -444,16 +444,13 @@
 
                 document.getElementById('apiCallGeofence').innerText = apiCall;
 
-                fetch('https://e6a59nov2l.execute-api.us-east-2.amazonaws.com/default/cstore-personalization', {
+                fetch('https://ntfy.sh/fm_demo_td', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'text/plain',
+                        'Title':'Fortnum & Mason'
                     },
-                    body: JSON.stringify({
-                        jsonData: jsonData,
-                        database: "real_time",
-                        table: "personalization_clickstream"
-                    })
+                    body: 'Benefit from 20% off at Fortnum & Mason St Pancras'
                 })
                 .then(response => response.json())
                 .then(data => {
