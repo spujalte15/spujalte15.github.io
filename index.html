@@ -275,24 +275,27 @@
         }
 
         #map {
-            width: 700px;
-            height: 400px;
+            width: 900px;
+            height: 550px;
+            background-image: url("https://uk.tortoisepath.com/wp-content/uploads/2024/09/Fortnum-Mason-at-St-Pancras-London-United-Kingdom-TortoisePathcom.jpeg");
+            background-size: cover;
+            background-position: bottom;
             position: relative;
             border: 2px solid #000;
         }
 
         #geofence {
             position: absolute;
-            top: 100px;
-            left: 150px;
+            top: 300px;
+            left: 600px;
             width: 200px;
             height: 200px;
             border: 2px dashed red;
             border-radius: 50%; /* Circular shape for the geofence */
         }
         #car {
-            width:60px;
-            height:auto;
+            width:auto;
+            height:280px;
             z-index:3;
         }
         #fmstore {
@@ -324,19 +327,11 @@
     <div class="title">
         <img src="https://i.postimg.cc/hGP7F21M/unnamed.png" width="350px" height="auto">
     </div>
-    <div class="toggle-container">
-        <label class="switch">
-            <input type="checkbox" onclick="toggleAllApiSections()">
-            <span class="slider"></span>
-        </label>
-        <span>Show/Hide All API Details</span>
-    </div>
     <div id="Geofence" class="tab-content active">
             <div class="flex-container">
                 <div id="map" class="map-container">
                     <div id="geofence"></div>
-                    <img id="car"  src="https://i.ibb.co/PGr9t7wT/s-blob-v1-IMAGE-0-ZOV92ii-HBA.png" width="60px" height="auto" alt="Car">
-                    <img id="fmstore" src="https://i.postimg.cc/CMRRYBTC/Untitled-presentation-1.png" >
+                    <img id="car"  src="https://i.ibb.co/chCvdRgN/freepik-background-23764.png" width="auto" height="200px" alt="Car">
                 </div>
             </div>
             <div class="api-output">
@@ -362,8 +357,8 @@
             let isDraggingEnabled = true;
 
             car.style.position = 'absolute';
-            car.style.left = '0px';
-            car.style.top = '0px';
+            car.style.left = '50px';
+            car.style.top = '250px';
 
             car.addEventListener('mousedown', function (e) {
                 if (!isDraggingEnabled) return;
