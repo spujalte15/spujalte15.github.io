@@ -108,7 +108,7 @@
         #map {
             width: 900px;
             height: 550px;
-            background-image: url("https://uk.tortoisepath.com/wp-content/uploads/2024/09/Fortnum-Mason-at-St-Pancras-London-United-Kingdom-TortoisePathcom.jpeg");
+            background-image: url("backgroundImage");
             background-size: cover;
             background-position: bottom;
             position: relative;
@@ -138,16 +138,29 @@
             z-index: 2;
         }
     </style>
+    <script>
+        fetch('config.json')  
+            .then(response => response.json())
+            .then(config => {
+                document.getElementById('backgroundImage').textContent = config.backgroundImage;
+                document.getElementById('logo').textContent = config.logo;
+                document.getElementById('character').textContent = config.character;
+                document.getElementById('notificationTitle').textContent = config.notificationTitle;
+                document.getElementById('notificationBody').textContent = config.notificationBody;
+                document.getElementById('ntfyTop').textContent = "https://ntfy.sh/" + config.ntfyTopic;
+            })
+            .catch(error => console.error('Error loading config:', error));
+    </script>
   </head>  
 <body>
     <div class="title">
-        <img src="https://i.postimg.cc/hGP7F21M/unnamed.png" width="350px" height="auto">
+        <img src="logo" width="350px" height="auto">
     </div>
     <div id="Geofence" class="tab-content active">
             <div class="flex-container">
                 <div id="map" class="map-container">
                     <div id="geofence"></div>
-                    <img id="character"  src="https://i.ibb.co/chCvdRgN/freepik-background-23764.png" width="auto" height="200px" alt="character">
+                    <img id="character"  src="character" width="auto" height="200px" alt="character">
                 </div>
             </div>
             <div class="api-output">
@@ -234,13 +247,13 @@
 
         function triggerFunction() {
 
-                fetch('https://ntfy.sh/fm_demo_td', {
+                fetch('ntfyTopic', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',
-                        'Title':'Fortnum & Mason'
+                        'Title':'notificationTitle'
                     },
-                    body: 'Benefit from 20% off at Fortnum & Mason St Pancras'
+                    body: 'notificationBody'
                 })
                 .then(response => response.json())
                 .then(data => {
