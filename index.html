@@ -140,21 +140,18 @@
     </style>
   </head>  
 <body>
-    
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('config.json')  
-                .then(response => response.json())
-                .then(config => {
-                    document.getElementById('backgroundImage').textContent = config.backgroundImage;
-                    document.getElementById('logo').textContent = config.logo;
-                    document.getElementById('character').textContent = config.character;
-                    document.getElementById('notificationTitle').textContent = config.notificationTitle;
-                    document.getElementById('notificationBody').textContent = config.notificationBody;
-                    document.getElementById('ntfyTop').textContent = "https://ntfy.sh/" + config.ntfyTopic;
-                })
-                .catch(error => console.error('Error loading config:', error));
-        });
+        fetch('config.json')  
+            .then(response => response.json())
+            .then(config => {
+                document.getElementById('backgroundImage') = config.backgroundImage;
+                document.getElementById('logo') = config.logo;
+                document.getElementById('character') = config.character;
+                document.getElementById('notificationTitle') = config.notificationTitle;
+                document.getElementById('notificationBody') = config.notificationBody;
+                document.getElementById('ntfyTop') = "https://ntfy.sh/" + config.ntfyTopic;
+            })
+            .catch(error => console.error('Error loading config:', error));
     </script>
     <div class="title">
         <img src="logo" width="350px" height="auto">
