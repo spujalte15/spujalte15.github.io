@@ -143,7 +143,7 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            fetch('spujalte15.github.io/config.json')  
+            fetch('config.json')  
                 .then(response => response.json())
                 .then(config => {
                     document.getElementById('backgroundImage').textContent = config.backgroundImage;
