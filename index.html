@@ -144,7 +144,7 @@
             .then(response => response.json())
             .then(config => {
                 siteConfig = config;
-                document.getElementById('map').style.backgroundImage = 'url(${config.backgroundImage})';
+                document.getElementById('map').style.backgroundImage = 'url(siteConfig.backgroundImage)';
                 const logoElement = document.getElementById('logo');
                 logoElement.src = config.logo;
                 const characterElement = document.getElementById('character');
