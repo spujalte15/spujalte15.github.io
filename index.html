@@ -144,12 +144,14 @@
         fetch('config.json')  
             .then(response => response.json())
             .then(config => {
-                document.getElementById('backgroundImage') = config.backgroundImage;
-                document.getElementById('logo') = config.logo;
-                document.getElementById('character') = config.character;
-                document.getElementById('notificationTitle') = config.notificationTitle;
-                document.getElementById('notificationBody') = config.notificationBody;
-                document.getElementById('ntfyTop') = "https://ntfy.sh/" + config.ntfyTopic;
+                document.api-container.map.backgroundImage = 'url('${config.backgroundImage}')';
+                const logoElement = document.getElementById('logo');
+                logoElement.src = config.logo;
+                const characterElement = document.getElementById('character');
+                characterElement.src = config.character;
+                document.getElementById('notificationTitle').textContent = config.notificationTitle;
+                document.getElementById('notificationBody').textContent = config.notificationBody;
+                window.ntfyTopic = config.ntfyTopic;
             })
             .catch(error => console.error('Error loading config:', error));
     </script>
@@ -247,13 +249,13 @@
 
         function triggerFunction() {
 
-                fetch('ntfyTopic', {
+                fetch('https://ntfy.sh/%{window.ntfyTopic}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',
-                        'Title':'notificationTitle'
+                        'Title':document.getElementById('notification-title').textContent
                     },
-                    body: 'notificationBody'
+                    body: document.getElementById('notification-body').textContent
                 })
                 .then(response => response.json())
                 .then(data => {
