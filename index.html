@@ -144,6 +144,7 @@
         fetch('config.json')  
             .then(response => response.json())
             .then(config => {
+                siteConfig = config;
                 document.getElementById('map').style.backgroundImage = 'url(${config.backgroundImage})';
                 const logoElement = document.getElementById('logo');
                 logoElement.src = config.logo;
@@ -251,9 +252,9 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',
-                        'Title':document.getElementById('notification-title').textContent
+                        'Title': siteConfig.notificationTitle
                     },
-                    body: document.getElementById('notification-body').textContent
+                    body: siteConfig.notificationBody
                 })
                 .then(response => response.json())
                 .then(data => {
