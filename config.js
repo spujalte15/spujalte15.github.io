@@ -1,8 +1,8 @@
-{
+const config = {
     "backgroundImage": "https://uk.tortoisepath.com/wp-content/uploads/2024/09/Fortnum-Mason-at-St-Pancras-London-United-Kingdom-TortoisePathcom.jpeg",
     "logo": "https://i.postimg.cc/hGP7F21M/unnamed.png",
     "character": "https://i.ibb.co/chCvdRgN/freepik-background-23764.png",
     "notificationTitle": "Title",
     "notificationBody": "Body",
     "ntfyTopic": "fm_demo_td"
-}
+};
