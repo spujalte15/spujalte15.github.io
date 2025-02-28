@@ -150,7 +150,6 @@
                 logoElement.src = config.logo;
                 const characterElement = document.getElementById('character');
                 characterElement.src = config.character;
-                window.ntfyTopic = config.ntfyTopic;
             })
             .catch(error => console.error('Error loading config:', error));
     </script>
@@ -248,7 +247,7 @@
 
         function triggerFunction() {
 
-                fetch('https://ntfy.sh/${window.ntfyTopic}', {
+                fetch('https://ntfy.sh/'+siteConfig.ntfyTopic', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',
