@@ -144,19 +144,17 @@
         fetch('config.json')  
             .then(response => response.json())
             .then(config => {
-                document.api-container.map.backgroundImage = 'url('${config.backgroundImage}')';
+                document.getElementById('map').style.backgroundImage = 'url(${config.backgroundImage})';
                 const logoElement = document.getElementById('logo');
                 logoElement.src = config.logo;
                 const characterElement = document.getElementById('character');
                 characterElement.src = config.character;
-                document.getElementById('notificationTitle').textContent = config.notificationTitle;
-                document.getElementById('notificationBody').textContent = config.notificationBody;
                 window.ntfyTopic = config.ntfyTopic;
             })
             .catch(error => console.error('Error loading config:', error));
     </script>
     <div class="title">
-        <img src="logo" width="350px" height="auto">
+        <img id="logo" src="" width="350px" height="auto">
     </div>
     <div id="Geofence" class="tab-content active">
             <div class="flex-container">
@@ -249,7 +247,7 @@
 
         function triggerFunction() {
 
-                fetch('https://ntfy.sh/%{window.ntfyTopic}', {
+                fetch('https://ntfy.sh/${window.ntfyTopic}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',
