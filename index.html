@@ -247,7 +247,7 @@
 
         function triggerFunction() {
 
-                fetch('https://ntfy.sh/'+siteConfig.ntfyTopic', {
+                fetch(siteConfig.ntfyTopic, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',
