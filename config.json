@@ -4,5 +4,5 @@
     "character": "https://i.ibb.co/chCvdRgN/freepik-background-23764.png",
     "notificationTitle": "Title",
     "notificationBody": "Body",
-    "ntfyTopic": "fm_demo_td"
+    "ntfyTopic": "https://ntfy.sh/fm_demo_td"
 }
