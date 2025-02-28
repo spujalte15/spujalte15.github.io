@@ -138,6 +138,8 @@
             z-index: 2;
         }
     </style>
+  </head>  
+<body>
     <script>
         fetch('config.json')  
             .then(response => response.json())
@@ -151,8 +153,6 @@
             })
             .catch(error => console.error('Error loading config:', error));
     </script>
-  </head>  
-<body>
     <div class="title">
         <img src="logo" width="350px" height="auto">
     </div>
