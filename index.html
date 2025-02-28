@@ -144,7 +144,7 @@
             .then(response => response.json())
             .then(config => {
                 siteConfig = config;
-                document.getElementById('map').style.backgroundImage = 'url(${siteConfig.backgroundImage})';
+                document.getElementById('map').style.backgroundImage = 'url(${config.backgroundImage})';
                 const logoElement = document.getElementById('logo');
                 logoElement.src = config.logo;
                 const characterElement = document.getElementById('character');
@@ -159,7 +159,7 @@
             <div class="flex-container">
                 <div id="map" class="map-container">
                     <div id="geofence"></div>
-                    <img id="character"  src="character" width="auto" height="200px" alt="character">
+                    <img id="character"  src="" width="auto" height="200px" alt="character">
                 </div>
             </div>
             <div class="api-output">
