@@ -145,7 +145,10 @@
             .then(config => {
                 siteConfig = config;
                 console.log('Background Image URL:', siteConfig.backgroundImage);
-                document.getElementById('map').style.backgroundImage = 'url(${siteConfig.backgroundImage})';
+                const mapElement = document.getElementById('map');
+                if (mapElement) {
+                    mapElement.style.backgroundImage = "url('" + config.backgroundImage + "')";
+                }
                 const logoElement = document.getElementById('logo');
                 logoElement.src = config.logo;
                 const characterElement = document.getElementById('character');
