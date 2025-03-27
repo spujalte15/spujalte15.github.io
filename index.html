@@ -147,10 +147,10 @@
                 console.log('Background Image URL:', siteConfig.backgroundImage);
                 const mapElement = document.getElementById('map');
                 if (mapElement) {
-                    mapElement.style.backgroundImage = "url('" + config.backgroundImage + "')";
+                    mapElement.style.backgroundImage = "url('https://i.ibb.co/RGf09BYZ/5edfa51bd87c4-leroy1-1-4730260-4730902-1.jpg')";
                 }
                 const logoElement = document.getElementById('logo');
-                logoElement.src = config.logo;
+                logoElement.src = 'https://i.ibb.co/7dB5fsXb/Logo-Adeo-svg-1.png';
                 const characterElement = document.getElementById('character');
                 characterElement.src = config.character;
             })
@@ -161,7 +161,7 @@
     </div>
     <div id="Geofence" class="tab-content active">
             <div class="flex-container">
-                <div id="map" class="map-container" style="background-image: url(siteConfig.backgroundImage)">
+                <div id="map" class="map-container" style="background-image: url('https://i.ibb.co/RGf09BYZ/5edfa51bd87c4-leroy1-1-4730260-4730902-1.jpg')">
                     <div id="geofence"></div>
                     <img id="character"  src="" width="auto" height="200px" alt="character">
                 </div>
@@ -250,13 +250,13 @@
 
         function triggerFunction() {
 
-                fetch(siteConfig.ntfyTopic, {
+                fetch('https://ntfy.sh/adeo_demo_store_pick-up', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',
-                        'Title': siteConfig.notificationTitle
+                        'Title': 'Leroy Merlin Villeneuve d'Ascq'
                     },
-                    body: siteConfig.notificationBody
+                    body: 'Your store just received the lamp pop U in your favourite colour, do not miss a chance to check it out inside!'
                 })
                 .then(response => response.json())
                 .then(data => {
