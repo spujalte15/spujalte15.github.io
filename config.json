@@ -1,8 +1,8 @@
 {
-    "backgroundImage": "https://uk.tortoisepath.com/wp-content/uploads/2024/09/Fortnum-Mason-at-St-Pancras-London-United-Kingdom-TortoisePathcom.jpeg",
-    "logo": "https://i.postimg.cc/hGP7F21M/unnamed.png",
+    "backgroundImage": "https://i.ibb.co/RGf09BYZ/5edfa51bd87c4-leroy1-1-4730260-4730902-1.jpg",
+    "logo": "https://i.ibb.co/7dB5fsXb/Logo-Adeo-svg-1.png",
     "character": "https://i.ibb.co/chCvdRgN/freepik-background-23764.png",
-    "notificationTitle": "Title",
-    "notificationBody": "Body",
-    "ntfyTopic": "https://ntfy.sh/fm_demo_td"
+    "notificationTitle": "Leroy Merlin Villeneuve d'Ascq",
+    "notificationBody": "Your store just received the lamp pop U in your favourite colour, do not miss a chance to check it out inside!",
+    "ntfyTopic": "https://ntfy.sh/adeo_demo_store_pick-up"
 }
